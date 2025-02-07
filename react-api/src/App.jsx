@@ -5,9 +5,10 @@ import "./App.css";
 function App() {
   const [articles, setArticles] = useState(articlesData);
   const [newArticleTitle, setNewArticleTitle] = useState("");
-  const [newArticleAuthor, setNewArticleAuthor] = useState("");
+  const [newArticleImage, setNewArticleImage] = useState("");
   const [newArticleContent, setNewArticleContent] = useState("");
-  const [newArticleCategory, setNewArticleCategory] = useState("categoria");
+  const [newArticleTags, setNewArticleTags] = useState("");
+  const [newArticleAuthor, setNewArticleAuthor] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -15,16 +16,18 @@ function App() {
     const newArticle = {
       id: Date.now(),
       title: newArticleTitle,
-      author: newArticleAuthor,
       content: newArticleContent,
-      category: newArticleCategory,
+      author: newArticleAuthor,
+      tags: newArticleTags.split(",").map((tag) => tag.trim()),
+      image: newArticleImage,
     };
 
     setArticles([...articles, newArticle]);
     setNewArticleTitle("");
-    setNewArticleAuthor("");
     setNewArticleContent("");
-    setNewArticleCategory("categoria");
+    setNewArticleImage("");
+    setNewArticleTags("");
+    setNewArticleAuthor("");
   };
 
   return (
@@ -34,11 +37,12 @@ function App() {
         {articles.map((article) => (
           <li key={article.id}>
             <h2>{article.title}</h2>
+            <img src={article.image} alt={article.title} width="200" />
             <p>
               <strong>Autore:</strong> {article.author}
             </p>
             <p>
-              <strong>Categoria:</strong> {article.category}
+              <strong>Categoria:</strong> {article.tags}
             </p>
             <p>{article.content}</p>
           </li>
@@ -49,9 +53,10 @@ function App() {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Titolo dell'contenuto"
+          placeholder="Titolo dell'articolo"
           value={newArticleTitle}
           onChange={(e) => setNewArticleTitle(e.target.value)}
+          required
         />
         <input
           type="text"
@@ -63,15 +68,20 @@ function App() {
           placeholder="Contenuto"
           value={newArticleContent}
           onChange={(e) => setNewArticleContent(e.target.value)}
+          required
         />
-        <select
-          value={newArticleCategory}
-          onChange={(e) => setNewArticleCategory(e.target.value)}
-        >
-          <option value="categoria"> -</option>
-          <option value="Old">Old</option>
-          <option value="New">New</option>
-        </select>
+        <input
+          type="text"
+          placeholder="URL immagine"
+          value={newArticleImage}
+          onChange={(e) => setNewArticleImage(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Categorie"
+          value={newArticleTags}
+          onChange={(e) => setNewArticleTags(e.target.value)}
+        />
         <button type="submit">Aggiungi contenuto</button>
       </form>
     </div>
